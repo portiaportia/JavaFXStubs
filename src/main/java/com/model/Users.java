@@ -7,7 +7,7 @@ public class Users {
 	private ArrayList<User> userList;
 	
 	private Users() {
-		userList = Database.getUsers();
+		userList = DataLoader.getUsers();
 	}
 	
 	public static Users getInstance() {
@@ -19,12 +19,37 @@ public class Users {
 	}
 
 	public boolean haveUser(String userName) {
-		return true;
+		for(User user : userList) {
+			if(user.getUserName().equals(userName)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public User getUser(String userName) {
-		if(!haveUser(userName)) return null;
+		for(User user : userList) {
+			if(user.getUserName().equals(userName)) {
+				return user;
+			}
+		}
 		
-		return new User(userName, "amy", "smith");
+		return null;
+	}
+	
+	public ArrayList<User> getUsers() {
+		return userList;
+	}
+	
+	public boolean addUser(String userName, String firstName, String lastName, int age, String phoneNumber) {
+		if(haveUser(userName))return false;
+		
+		userList.add(new User(userName, firstName, lastName, age, phoneNumber));
+		return true;
+	}
+	
+	public void saveUsers() {
+		DataWriter.saveUsers();
 	}
 }
